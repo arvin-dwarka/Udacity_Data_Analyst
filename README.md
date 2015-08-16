@@ -3,4 +3,5 @@
 This repository contains project works for Udacity's Data Analyst Nanodegree Program.
 
 ###Projects:
-- **P0** - Analyze Analyze Chopstick Length
+- **P0** - Analyze Chopstick Length
+- **P1** - Test a Perceptual Phenomenon
