@@ -2,6 +2,7 @@ import pandas
 import pandasql
 import csv
 import datetime
+import os
 
 
 # ps2.1
@@ -218,28 +219,41 @@ if __name__ == '__main__':
 	'''
 	This calls the functions above.
 	'''
+	os.system('clear')
+
 	print "Number of rainy days:"
 	print num_rainy_days('weather_underground.csv')
 	raw_input("Press Enter to continue...")
+	os.system('clear')
+
 	print "Maximum temperature aggregate by fog:"
 	print max_temp_aggregate_by_fog('weather_underground.csv')
 	raw_input("Press Enter to continue...")
+	os.system('clear')
+
 	print "Average minimum temperature:"
 	print avg_min_temperature('weather_underground.csv')
 	raw_input("Press Enter to continue...")
+	os.system('clear')
+
 	print "Fixed turnstile data:"
 	fix_turnstile_data('turnstile_110528.txt')
 	print open('updated_turnstile_110528.txt').read()
 	raw_input("Press Enter to continue...")
+	os.system('clear')
+
 	print "Filter by regular:"
 	df = filter_by_regular('turnstile_data.csv')
 	print df
 	raw_input("Press Enter to continue...")
+
 	print "Hourly entries:"
 	df = pandas.read_csv('turnstile_data.csv')
 	print get_hourly_entries(df)
 	raw_input("Press Enter to continue...")
+	os.system('clear')
+
 	print "Hourly exits:"
 	df = pandas.read_csv('turnstile_data.csv')
 	print get_hourly_exits(df)
-
+	os.system('clear')
