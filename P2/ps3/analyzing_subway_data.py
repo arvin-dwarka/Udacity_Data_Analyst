@@ -82,5 +82,3 @@ def compute_r_squared(data, predictions):
 	r_squared = 1-(np.sum(np.square(data-predictions)))/np.sum(np.square(data-np.mean(data)))
 	return r_squared
 
-
-
