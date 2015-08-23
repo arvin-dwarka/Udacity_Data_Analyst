@@ -70,8 +70,7 @@ The above diagram shows the mean trend in ridership over the course of a week. I
 
 ###Section 4. Conclusion
 
-####4.1 From your analysis and interpretation of the data, do more people ride
-the NYC subway when it is raining or when it is not raining?  
+####4.1 From your analysis and interpretation of the data, do more people ride the NYC subway when it is raining or when it is not raining?  
 
 Based on the Mann-Whitney U-test producing a p-value of 0.025, it can be concluded with high certainty that more people ride the NYC subway on rainy days. It is very likely and understandable that rain is a motivator for people to seek refuge by using the subway instead of other modes of travel, such as walking and biking.
 
