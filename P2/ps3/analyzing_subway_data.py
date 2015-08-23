@@ -136,7 +136,7 @@ if __name__ == '__main__':
 	print mann_whitney_plus_means(df)
 	raw_input("Press enter to continue...")
 
-	print "Linear regression predictions via gradient descent:"
+	print "Linear regression predictions:"
 	predictions = predictions(df)
 	print predictions
 	raw_input("Press enter to continue...")
