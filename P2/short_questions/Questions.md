@@ -13,11 +13,13 @@ The non-parametric Mann-Whitney test was applicable given the non-normal distrib
 
 ####1.3 What results did you get from this statistical test? These should include the following numerical values: p-values, as well as the means for each of the two samples under test.
 
-|Mean for rainy population                          |1,105.45     |
-|Mean for non-rainy population                      |1,090.28     |
-|Percent difference in mean (rainy vs. non-rainy)   |             |
-|U-statistic                                        |1924409167.0 |
-|p-value                                            |0.025        |
+|                Statistical metric                |     Values     |
+|:------------------------------------------------:|:--------------:|
+| Mean for rainy population                        |       1,105.45 |
+| Mean for non-rainy population                    |       1,090.28 |
+| Percent difference in mean (rainy vs. non-rainy) |           1.4% |
+| U-statistic                                      | 1924,409,167.0 |
+| p-value                                          |          0.025 |
 
 
 ####1.4 What is the significance and interpretation of these results?
