@@ -6,4 +6,4 @@ This project contains code challenges for the `Intro to Data Science` course, an
 - **ps2** - Problem Set 2: Wrangling Subway Data
 - **ps3** - Problem Set 3: Analyzing Subway Data
 - **ps3** - Problem Set 4: Visualizing Subway Data
-- **short_questions** - Analysis for short questions portion (see folder for list of questions)
+- **short_questions** - Analysis for short questions portion

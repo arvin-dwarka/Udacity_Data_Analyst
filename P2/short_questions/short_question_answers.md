@@ -34,11 +34,11 @@ A machine learning algorithm using OLS with statsmodel was used to train the lin
 
 ####2.2 What features (input variables) did you use in your model? Did you use any dummy variables as part of your features?
 
-The features used were rain, precipitation, mean wind speed, hour of the day, mean temperature, and weekday. The dummy variable used were the turnsitle *unit* identifications. Linear regression was not applied to the unit parameters.
+The features used were rain, precipitation, mean wind speed, hour of the day, mean temperature, and weekday. The dummy variable used were the turnstile *unit* identifications. Linear regression was not applied to the unit parameters.
 
 ####2.3 Why did you select these features in your model? 
 
-The default feature set of rain, precipitaion, hour and mean temperature were preserved as they maintained a higher R-squared. Two further features, mean wind speed and weekday, were included as they were likely drivers for riderships; there was a boost in R-squared by including mean wind speed and weekday features.
+The default feature set of rain, precipitation, hour and mean temperature were preserved as they maintained a higher R-squared. Two further features, mean wind speed and weekday, were included as they were likely drivers for ridership; there was a boost in R-squared by including mean wind speed and weekday features.
 
 ####2.4 What are the parameters (also known as "coefficients" or "weights") of the non-dummy features in your linear regression model?
 
@@ -84,9 +84,9 @@ The Mann-Whitney U-test was used to draw the above conclusion despite the percen
 
 ####5.1 Please discuss potential shortcomings of the methods of your analysis, including: Dataset; analysis, such as the linear regression model or statistical test.
 
-When inspecting the dataset, it can be noted that there was more entries than exits, as well as more non-rainy days than rainy days. This could have likely happened due to errors/miscounts on some turnstiles, and the vast variability in ridership by *units*. Perhaps, these issues could have been resolved by taking a larger dataset over the course of multiple months and normalizing the data by subway locations.
+When inspecting the dataset, it can be noted that there was more entries than exits, as well as more non-rainy days than rainy days. This could have likely happened due to errors/miscounts on some turnstiles, and the vast variability in ridership by *units*. Perhaps, taking a larger dataset over the course of multiple months and normalizing the data by subway locations could have resolved these issues.
 
-The quantitative analysis used in this project had some shortcomings. Notably, the low R2 value. As discussed in Section 2.6, the inclusion of more feautures through a more expansive study or polynomial regressions could have increased the accuracy of the model. The machine learning algorithm used was unsupervised. It may have been beneficial to split the dataset into a trained and untrained sample sets.
+The quantitative analysis used in this project had some shortcomings. Notably, the low R2 value. As discussed in Section 2.6, the inclusion of more features through a more expansive study or polynomial regressions could have increased the accuracy of the model. The machine learning algorithm used was unsupervised. It may have been beneficial to split the dataset into a trained and untrained sample sets.
 
 
 ####5.2 (Optional) Do you have any other insight about the dataset that you would like to share with us?
