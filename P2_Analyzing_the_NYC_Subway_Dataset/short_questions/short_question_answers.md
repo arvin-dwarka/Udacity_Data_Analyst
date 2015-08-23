@@ -18,12 +18,12 @@ The non-parametric Mann-Whitney test was applicable given the non-normal distrib
 | Mean for non-rainy population                    |       1,090.28 |
 | Percent difference in mean (rainy vs. non-rainy) |           1.4% |
 | U-statistic                                      |1,924,409,167.0 |
-| p-value                                          |          0.025 |
-
+| p-value (one-sided)                              |    0.024999912 |
+| p-value (two-sided)                              |    0.049999825 |
 
 ####1.4 What is the significance and interpretation of these results?
 
-The null hypothesis is rejected. While the percent difference between the means are very small (1.4%), the U-statistic is very, very large at 1,924,409,167.0, which is close to its theoretical maximum, and the p-value of 0.025 is less than the p-critical of 0.05. There is a statistical difference between the ridership on rainy and non-rainy days.
+The null hypothesis is rejected. While the percent difference between the means are very small (1.4%), the U-statistic is very, very large at 1,924,409,167.0, which is close to its theoretical maximum, and the two-sided p-value of 0.049 is less than the p-critical of 0.05. There is a statistical difference between the ridership on rainy and non-rainy days.
 
 
 ###Section 2. Linear Regression
@@ -50,29 +50,33 @@ The default feature set of rain, precipitation, hour and mean temperature were p
 
 ####2.6 What does this R2 value mean for the goodness of fit for your regression model? Do you think this linear model to predict ridership is appropriate for this dataset, given this R2  value?
 
-The R2 value of 0.463 (46.3%) is a low measure for the goodness of fit of variability in our regression model. This model may be appropriate for *ball-park* estimations. Perhaps, advance studies on the drivers of readership coupled with polynomial regressions may be prove to be a better fit.
+The R2 value of 0.463 (46.3%) is a low measure for the goodness of fit of variability in our regression model. This model may be appropriate for *ball-park* estimations. Perhaps, advance studies on the drivers of readership coupled with polynomial regressions may be prove to be a better fit. The adequacy of the linear regression can also be examined through the distribution of residuals, the difference between the predicted and the actual values.
+
+![Image of residual points](https://raw.githubusercontent.com/arvin-dwarka/Udacity_Data_Analyst/master/P2_Analyzing_the_NYC_Subway_Dataset/ps3/figure_2.png)
+
+The histogram of the residuals has long tails, which suggests that there are some very large residuals a reason to question our linear regression model.
 
 
 ###Section 3. Visualization
 
 ####3.1 One visualization should contain two histograms: one of  ENTRIESn_hourly for rainy days and one of ENTRIESn_hourly for non-rainy days.
 
-![Image of histogram of ridership on rainy and non-rainy days](https://raw.githubusercontent.com/arvin-dwarka/Udacity_Data_Analyst/master/P2/ps3/figure_1.png)
+![Image of histogram of ridership on rainy and non-rainy days](https://raw.githubusercontent.com/arvin-dwarka/Udacity_Data_Analyst/master/P2_Analyzing_the_NYC_Subway_Dataset/ps3/figure_1.png)
 
 The above illustration depicts the non-normal distribution of ridership between rainy and non-rainy days. It should be noted that the two populations are not of equal sizes. Section 1.3 dives deeper into the statistical analysis of these two populations.
 
 ####3.2 One visualization can be more freeform. 
 
-![Image of ridership over the weekdays](https://raw.githubusercontent.com/arvin-dwarka/Udacity_Data_Analyst/master/P2/ps4/figure_2.png)
+![Image of ridership over the weekdays](https://raw.githubusercontent.com/arvin-dwarka/Udacity_Data_Analyst/master/P2_Analyzing_the_NYC_Subway_Dataset/ps4/figure_2.png)
 
-The above diagram shows the mean trend in ridership over the course of a week. It can be observed that ridership is high from Monday to Thursday, and dips drastically Friday till the lowest level on Saturday, but picking up again on Sunday. This is inline with the thought that people would use the subway mostly during the working days. Hence, weekdays were used as a feature in Section 2.3.
+The above diagram shows the mean trend in ridership over the course of a week. It can be observed that ridership is high during the weekdays (Monday to Friday) and the lowest on the weekends (Saturday and Sunday). This is inline with the thought that people would use the subway mostly during the normal working days. Hence, weekdays were used as a feature in Section 2.3.
 
 
 ###Section 4. Conclusion
 
 ####4.1 From your analysis and interpretation of the data, do more people ride the NYC subway when it is raining or when it is not raining?  
 
-Based on the Mann-Whitney U-test producing a p-value of 0.025, it can be concluded with high certainty that more people ride the NYC subway on rainy days. It is very likely and understandable that rain is a motivator for people to seek refuge by using the subway instead of other modes of travel, such as walking and biking.
+Based on the Mann-Whitney U-test producing a very high U-statistic and a p-value of 0.049, it can be concluded with high certainty that more people ride the NYC subway on rainy days. It is very likely and understandable that rain is a motivator for people to seek refuge by using the subway instead of other modes of travel, such as walking and biking.
 
 ####4.2 What analyses lead you to this conclusion? You should use results from both your statistical tests and your linear regression to support your analysis.
 
