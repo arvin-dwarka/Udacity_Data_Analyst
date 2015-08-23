@@ -1,19 +1,31 @@
 #Analyzing the NYC Subway Dataset
 ##Questions
 
-Overview
-This project consists of two parts. In Part 1 of the project, you should have completed the questions in Problem Sets 2, 3, and 4 in the Introduction to Data Science course.
-This document addresses part 2 of the project. Please use this document as a template and answer the following questions to explain your reasoning and conclusion behind your work in the problem sets. You will attach a document with your answers to these questions as part of your final project submission.
-Section 0. References
+###Section 1. Statistical Test
 
-Please include a list of references you have used for this project. Please be specific - for example, instead of including a general website such as stackoverflow.com, try to include a specific topic from Stackoverflow that you have found useful.
-Section 1. Statistical Test
+####1.1 Which statistical test did you use to analyze the NYC subway data? Did you use a one-tail or a two-tail P value? What is the null hypothesis? What is your p-critical value?
 
-1.1 Which statistical test did you use to analyze the NYC subway data? Did you use a one-tail or a two-tail P value? What is the null hypothesis? What is your p-critical value?
-1.2 Why is this statistical test applicable to the dataset? In particular, consider the assumptions that the test is making about the distribution of ridership in the two samples.
-1.3 What results did you get from this statistical test? These should include the following numerical values: p-values, as well as the means for each of the two samples under test.
-1.4 What is the significance and interpretation of these results?
-Section 2. Linear Regression
+The Mann-Whitney U-test was used to analyze the NYC subway data and compare ridership on rainy and non-rainy days. A two-tail test was ideal for this analysis. The null hypothesis was that the two populations of rainy and non-rainy days were the same, that is, there was no correlation with ridership. The p-critical value used was 0.05.
+
+####1.2 Why is this statistical test applicable to the dataset? In particular, consider the assumptions that the test is making about the distribution of ridership in the two samples.
+
+The non-parametric Mann-Whitney test was applicable given the non-normal distribution of rainy and non-rainy populations as illustrated in Section 3.1.
+
+####1.3 What results did you get from this statistical test? These should include the following numerical values: p-values, as well as the means for each of the two samples under test.
+
+|Mean for rainy population                          |1,105.45     |
+|Mean for non-rainy population                      |1,090.28     |
+|Percent difference in mean (rainy vs. non-rainy)   |             |
+|U-statistic                                        |1924409167.0 |
+|p-value                                            |0.025        |
+
+
+####1.4 What is the significance and interpretation of these results?
+
+
+
+
+###Section 2. Linear Regression
 
 2.1 What approach did you use to compute the coefficients theta and produce prediction for ENTRIESn_hourly in your regression model:
 OLS using Statsmodels or Scikit Learn

@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import scipy
 import scipy.stats
 import statsmodels.api as sm
+from datetime import *
+
 
 
 # ps3.1
@@ -102,7 +104,8 @@ def predictions(dataframe):
 	'''
 	This function runs preductions on dataframe via gradient descent.
 	'''
-	features = dataframe[['rain', 'precipi', 'meanwindspdi', 'Hour', 'meantempi']]
+	dataframe['weekday'] = dataframe['DATEn'].map(lambda x:datetime.strptime(x, '%Y-%m-%d').weekday())
+	features = dataframe[['rain', 'precipi', 'meanwindspdi', 'Hour', 'meantempi', 'weekday']]
 	dummy_units = pandas.get_dummies(dataframe['UNIT'], prefix='unit')
 	features = features.join(dummy_units)
 
