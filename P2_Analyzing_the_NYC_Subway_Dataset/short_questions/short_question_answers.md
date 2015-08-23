@@ -50,11 +50,11 @@ The default feature set of rain, precipitation, hour and mean temperature were p
 
 ####2.6 What does this R2 value mean for the goodness of fit for your regression model? Do you think this linear model to predict ridership is appropriate for this dataset, given this R2  value?
 
-The R2 value of 0.463 (46.3%) is a low measure for the goodness of fit of variability in our regression model. This model may be appropriate for *ball-park* estimations. Perhaps, advance studies on the drivers of readership coupled with polynomial regressions may be prove to be a better fit. The adequacy of the linear regression can also be examined through the distribution of residuals, the difference between the predicted and the actual values.
+The R2 value of 0.463 (46.3%) is a low measure for the goodness of fit of variability in our regression model. This model may be appropriate for *ball-park* estimations. The adequacy of the linear regression can also be examined through the distribution of residuals, the difference between the predicted and the actual values.
 
 ![Image of residual points](https://raw.githubusercontent.com/arvin-dwarka/Udacity_Data_Analyst/master/P2_Analyzing_the_NYC_Subway_Dataset/ps3/figure_2.png)
 
-The histogram of the residuals has long tails, which suggests that there are some very large residuals a reason to question our linear regression model.
+The histogram of the residuals has long tails, which suggests that there are some very large residuals - a reason to question the linear regression model. Perhaps, advance studies on the drivers of readership coupled with polynomial regressions may be prove to be a better fit.
 
 
 ###Section 3. Visualization
@@ -87,7 +87,9 @@ The Mann-Whitney U-test was used to draw the above conclusion despite the percen
 
 ####5.1 Please discuss potential shortcomings of the methods of your analysis, including: Dataset; analysis, such as the linear regression model or statistical test.
 
-When inspecting the dataset, it can be noted that there was more entries than exits, as well as more non-rainy days than rainy days. This could have likely happened due to errors/miscounts on some turnstiles, and the vast variability in ridership by *units*. Perhaps, taking a larger dataset over the course of multiple months and normalizing the data by subway locations could have resolved these issues.
+When inspecting the dataset, it can be noted that there was more entries than exits, as well as more non-rainy days than rainy days. This could have likely happened due to errors/miscounts on some turnstiles, and the vast variability in ridership by *units*. It is likely that taking a larger dataset over the course of multiple months and normalizing the data by subway locations could have resolved these issues. 
+
+Furthermore, it should be noted that many variables included in the dataset that might be very closely related such as minimum, mean and maximum temperature. It may be difficult to disentangle the effects of such similar features and running the risk of problems with collinearity. This can cause some linear regression algorithms to give incorrect results.
 
 The quantitative analysis used in this project had some shortcomings. Notably, the low R2 value. As discussed in Section 2.6, the inclusion of more features through a more expansive study or polynomial regressions could have increased the accuracy of the model. The machine learning algorithm used was unsupervised. It may have been beneficial to split the dataset into a trained and untrained sample sets.
 
@@ -102,3 +104,5 @@ The machine learning algorithm used here was very interesting and had a very ste
 - [U-statistic](https://en.wikipedia.org/wiki/U-statistic)
 - [SciPy documentation](http://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.mannwhitneyu.html#scipy.stats.mannwhitneyu)
 - [Stats model documentation](http://statsmodels.sourceforge.net/0.5.0/generated/statsmodels.regression.linear_model.OLS.html)
+- [ggplot documentation](http://docs.ggplot2.org/0.9.3.1/index.html)
+- [Multicollinearity](http://en.wikipedia.org/wiki/Multicollinearity)
