@@ -155,6 +155,14 @@ def top_fast_food():
 
 if __name__ == '__main__':
     db = get_db()
+    print "number of nodes"
+    pprint( db.openstreetmap.find({"type": "node"}).count() )
+    print 'number of ways'
+    pprint( db.openstreetmap.find({"type": "way"}).count() )
+    print 'number of total documents'
+    pprint( db.openstreetmap.find().count() )
+    raw_input("Press enter to continue...\n")
+
     print "top contributing user"
     pprint(list( db.openstreetmap.aggregate(top_user()) ))
     raw_input("Press enter to continue...\n")

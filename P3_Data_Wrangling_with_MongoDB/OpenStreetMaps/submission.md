@@ -30,6 +30,8 @@ During the data audit, multiple instances of field names with double colons were
 
 
 **Additional note**
+Manually sifting through the json export, I noticed that the phone numbers were in different formats. While, this was not explored in this project, the `phonenumbers` python library could have been used to scrub through the phone numbers.
+
 A further point to note about the cleanliness of this dataset was the absence of problem characters.
 
 
@@ -42,6 +44,27 @@ A further point to note about the cleanliness of this dataset was the absence of
 
 This section contains basic statistic about the dataset and the MongoDB queries used on them. The following are snippets of queries found in `query.py`:
 
+**Number of nodes**
+```
+db.openstreetmap.find({"type": "node"}).count()
+
+3390650
+```
+
+**Number of ways**
+```
+db.openstreetmap.find({"type": "way"}).count()
+
+685670
+```
+
+**Number of total documents**
+```
+db.openstreetmap.find().count()
+
+4076435
+```
+It seems that there are 115 more total documents that the sum of nodes and ways. This is discussed further below.
 
 **Top contributer**
 ```
@@ -66,7 +89,7 @@ db.openstreetmap.aggregate([{
 The user [keithonearth](http://www.openstreetmap.org/user/keithonearth/history#map=5/55.782/-128.497) is very active on OpenStreetMap and is a huge contributor to the British Columbia province in general.
 
 
-**Number of users contributing only once**
+**Number of unique users contributing**
 ```
 db.openstreetmap.aggregate([{
         '$group': {
@@ -93,7 +116,7 @@ db.openstreetmap.aggregate([{
 [{u'_id': 5, u'num_users': 156}]
 ```
 
-Unsurprisingly, there are a large number of single contributors.
+Unsurprisingly, there are a large number of unique contributors.
 
 
 **Top 10 building types**
@@ -231,9 +254,11 @@ This query was out of plain curiosity and is inline with the claim that Vancouve
 
 ### Other ideas about the datasets
 
-The data validation and queries performed were primarily on *node* and *way* tags with a focus on address locations. There were a significant number of *nd* reference tags that were ignored. Depending on the application of this dataset for future analysis, it would be worthwhile to dive into this more and uncover the different tags and see if there are any discrepancies. It would also be interesting to dive into other areas of the data to assess cleanliness, such as postal codes, phone numbers and coordinate data.
+The data validation and queries performed were primarily on *node* and *way* tags with a focus on address locations. There were a significant number of *nd* reference tags that were ignored. Depending on the application of this dataset for future analysis, it would be worthwhile to dive into this more and uncover the different tags and see if there are any discrepancies. As noted above, there were 115 more total documents than the sum of nodes and ways. It is a bit perplexing that this would occur; perphaps, the data already contained a `type` field that was interfering with the script.
 
-Furthermore, there are ample more opportunities to clean this data beyond this cursory excercise as seen in the *Top 3 cafe* query. Nevertheless, the dataset is fairly clean as noted above. OpenStreepMap is crowdsourced and is therefore dependant on users' input, which could lead to incomplete or outdated information. It would be interesting to compare these results with Google Maps'.
+It would also be interesting to dive into other areas of the data to assess cleanliness, such as postal codes, phone numbers and coordinate data. The phone numbers were fairly consistent but did contain some inconsistencies that could have been improved. A few years back Vancouver's telecomm providers started offering the *778* area code in addition to *604*, and recently, there were talks of offering another area code to supply demand. This dataset could be used to observe the distribution of generally available phone numbers. Perhaps, businesses could be given different area codes to easily distinguish themselves from an individual caller.
+
+Lastly, there are ample more opportunities to clean this data beyond this cursory excercise as seen in the *Top 3 cafe* query. Nevertheless, the dataset is fairly clean as noted above. OpenStreepMap is crowdsourced and is therefore dependant on users' input, which could lead to incomplete or outdated information. It would be interesting to compare these results with Google Maps' API.
 
 
 
