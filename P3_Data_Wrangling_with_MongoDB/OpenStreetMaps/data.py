@@ -7,17 +7,54 @@ import codecs
 import json
 
 
-OSMFILE = 'data/vancouver_canada.osm'
+OSMFILE = 'data/vancouver_canada_subset.osm'
 
 lower = re.compile(r'^([a-z]|_)*$')
 lower_colon = re.compile(r'^([a-z]|_)*:([a-z]|_)*$')
+double_colon = re.compile(r'^([a-z]|_)*:([a-z]|_)*:([a-z]|_)*$')
 problemchars = re.compile(r'[=\+/&<>;\'"\?%#$@\,\. \t\r\n]')
 address_re = re.compile(r'^addr\:')
 street_re = re.compile(r'^street')
 
 CREATED = [ "version", "changeset", "timestamp", "user", "uid"]
 
+mapping = { "St": "Street",
+            "St.": "Street",
+            "Rd.": "Road",
+            "Ave": "Avenue",
+            "Hwy": "Highway",
+            "Hwy.": "Highway",
+            "HWY": "Highway",
+            "HIGHWAY": "Highway",
+            "Moncton": "Moncton Street",
+            "Pender": "Pender Street",
+            "Tsawwassen": "North Tsawwassen",
+            "av": "Avenue",
+            "Dr": "Drive",
+            "Dr.": "Drive",
+            "Edmonds": "Edmonds Street",
+            "Hastings": "Hastings Street",
+            "Blvd": "Boulevard",
+            "Jervis": "Jarvis"
+            }
+
+def update_name(name, mapping):
+    ''' 
+    apply mapping transformation to address names
+    '''
+    try:
+        street_name = name.split(' ')
+        street_name[-1] = mapping[street_name[-1]]
+        return ' '.join(street_name)
+
+    except KeyError:
+        mapping['name'] = 'name'
+        return name
+
 def shape_element(element):
+    '''
+    parse through elements for json export
+    '''
     node = {}
     address = {}
     pos_attrib = ['lat', 'lon']
@@ -57,11 +94,15 @@ def shape_element(element):
             val = child.get('v')
 
             # skip problematic characters
-            if re.search(problemchars, key):
+            if re.search(problemchars, key) or re.search(double_colon, key):
                 continue
 
             # parse address
             elif re.search(address_re, key):
+                # clean up the street names using mapping dict
+                if key == 'addr:street':
+                    val = update_name(val, mapping)
+
                 key = key.replace('addr:', '')
                 address[key] = val
 
@@ -85,7 +126,7 @@ def shape_element(element):
                         street_dict[key.replace('street:', '')] = val
                 else:
                     node['address'][key] = val
-            # assign street_full or fallback to compile street dict
+            # assign street or catch-all to compile street dict
             if street_full:
                 node['address']['street'] = street_full
             elif len(street_dict) > 0:
@@ -96,6 +137,9 @@ def shape_element(element):
         return None
 
 def process_map(file_in, pretty = False):
+    '''
+    main function that initiate the file transformation
+    '''
     file_out = "{0}.json".format(file_in)
     data = []
     with codecs.open(file_out, "w") as fo:
@@ -110,4 +154,4 @@ def process_map(file_in, pretty = False):
     return data
 
 if __name__ == "__main__":
-    process_map(OSMFILE, False)
+    process_map(OSMFILE, True)

@@ -1,0 +1,183 @@
+<h1 id="openstreetmap-sample-project-data-wrangling-with-mongodb">OpenStreetMap Sample Project Data Wrangling with MongoDB</h1>
+<p>Map area: Vancouver, BC, Canada</p> 
+<p>https://www.openstreetmap.org/relation/1852574#map=12/49.2573/-123.1241</p>
+
+<p>I chose the Vancouver BC area as this is where I reside. The ability to lean on my domain knowledge of this locale proved helpful as I learned how to wrangle data in this project. This area consists of 115 km<sup>2</sup> and just over 600,000 people. It is the third most populous city in Canada, but the most densely populated Canadian municipality and fourth in North America, behind New York, San Francisco, and Mexico City. Vancouver City is also known for being one of the most ethnically and linguistically diverse city in Canada.</p>
+<h3 id="problems-encountered-in-your-map">Problems encountered in your map</h3>
+<p>The data was surprisingly clean. I expected to see a lot more inconsistencies, but with the exception of minor typos, street abbreviations, and field names with colons the data seemed ready to be imported to MongoDB.</p>
+<p><strong>Street name typos</strong> While very low in occurrence, this type of inconsistency would have gone unnoticed had I not have intimate knowledge of the map area. I added these to my mapping dictionary to correct for. An example of such a mistake is, <code>Jervis =&gt; Jarvis</code>.</p>
+<p><strong>Street name abbreviations</strong> While auditing the dataset, I noticed instances where street names were in various formats while contextually being similar. These were also accounted for in the mapping dictionary to standardize the address. The following is a snippet of the mapping dictionary where four variations of <code>Highway</code> were corrected for:</p>
+<p><code>&quot;Hwy&quot;: &quot;Highway&quot;, &quot;Hwy.&quot;: &quot;Highway&quot;, &quot;HWY&quot;: &quot;Highway&quot;, &quot;HIGHWAY&quot;: &quot;Highway&quot;</code></p>
+<p><strong>Field names with colon</strong> During the data audit, multiple instances of field names with double colons were identified using regular expression. It seemed unlikely that the lower_colon regex would catch all colon instances, so I used a slight modification to remove the first colon.</p>
+<p><code>double_colon = re.compile(r'^([a-z]|_)*:([a-z]|_)*:([a-z]|_)*$')</code></p>
+<p><strong>Additional note</strong> A further point to note about the cleanliness of this dataset was the absence of problem characters.</p>
+<h3 id="overview-of-the-data">Overview of the Data</h3>
+<p><strong>File sizes</strong> <code>vancouver_canada.osm: 154.5 MB</code> <code>vancouver_canada.osm.json: 179.2 MB</code></p>
+<p>This section contains basic statistic about the dataset and the MongoDB queries used on them. The following are snippets of queries found in <code>query.py</code>:</p>
+<p><strong>Top contributer</strong></p>
+<pre><code>db.openstreetmap.aggregate([{
+        &#39;$group&#39;: {
+            &#39;_id&#39;: &#39;$created.user&#39;,
+            &#39;count&#39;: {
+                &#39;$sum&#39;: 1
+            }
+        }
+    }, {
+        &#39;$sort&#39;: {
+            &#39;count&#39;: -1
+        }
+    }, {
+        &#39;$limit&#39;: 1
+    }])
+
+[{u&#39;_id&#39;: u&#39;keithonearth&#39;, u&#39;count&#39;: 965035}]</code></pre>
+<p>The user <a href="http://www.openstreetmap.org/user/keithonearth/history#map=5/55.782/-128.497">keithonearth</a> is very active on OpenStreetMap and is a huge contributor to the British Columbia province in general.</p>
+<p><strong>Number of users contributing only once</strong></p>
+<pre><code>db.openstreetmap.aggregate([{
+        &#39;$group&#39;: {
+            &#39;_id&#39;: &#39;$created.user&#39;,
+            &#39;count&#39;: {
+                &#39;$sum&#39;: 1
+            }
+        }
+    }, {
+        &#39;$group&#39;: {
+            &#39;_id&#39;: &#39;$count&#39;,
+            &#39;num_users&#39;: {
+                &#39;$sum&#39;: 1
+            }
+        }
+    }, {
+        &#39;$sort&#39;: {
+            &#39;_id&#39;: 1
+        }
+    }, {
+        &#39;$limit&#39;: 1
+    }])
+
+[{u&#39;_id&#39;: 5, u&#39;num_users&#39;: 156}]</code></pre>
+<p>Unsurprisingly, there are a large number of single contributors.</p>
+<p><strong>Top 10 building types</strong></p>
+<pre><code>db.openstreetmap.aggregate([{
+        &#39;$match&#39;: {
+            &#39;building&#39;: {
+                &#39;$exists&#39;: 1
+            }
+        }
+    }, {
+        &#39;$group&#39;: {
+            &#39;_id&#39;: &#39;$building&#39;,
+            &#39;count&#39;: {
+                &#39;$sum&#39;: 1
+            }
+        }
+    }, {
+        &#39;$sort&#39;: {
+            &#39;count&#39;: -1
+        }
+    }, {
+        &#39;$limit&#39;: 10
+    }])
+
+[{u&#39;_id&#39;: u&#39;yes&#39;, u&#39;count&#39;: 543035},
+ {u&#39;_id&#39;: u&#39;residential&#39;, u&#39;count&#39;: 9060},
+ {u&#39;_id&#39;: u&#39;apartments&#39;, u&#39;count&#39;: 5980},
+ {u&#39;_id&#39;: u&#39;house&#39;, u&#39;count&#39;: 3525},
+ {u&#39;_id&#39;: u&#39;commercial&#39;, u&#39;count&#39;: 1025},
+ {u&#39;_id&#39;: u&#39;entrance&#39;, u&#39;count&#39;: 565},
+ {u&#39;_id&#39;: u&#39;roof&#39;, u&#39;count&#39;: 545},
+ {u&#39;_id&#39;: u&#39;school&#39;, u&#39;count&#39;: 445},
+ {u&#39;_id&#39;: u&#39;retail&#39;, u&#39;count&#39;: 400},
+ {u&#39;_id&#39;: u&#39;greenhouse&#39;, u&#39;count&#39;: 175}]</code></pre>
+<p>There were an odd number of <code>yes</code> entries for buildings. As I investigated in the json file, they seems to be just an <em>other</em> category. So I ignored adjusting it to use the amenity name instead.</p>
+<p><strong>Top 5 amenities</strong></p>
+<pre><code>db.openstreetmap.aggregate([{
+        &#39;$match&#39;: {
+            &#39;amenity&#39;: {
+                &#39;$exists&#39;: 1
+            } 
+        } 
+    }, {
+        &#39;$group&#39;: {
+            &#39;_id&#39;: &#39;$amenity&#39;, 
+            &#39;count&#39;: {
+                &#39;$sum&#39;:1
+            } 
+        } 
+    }, {
+        &#39;$sort&#39;: {
+            &#39;count&#39;:-1
+        }
+    }, {
+        &#39;$limit&#39;: 5
+    }])
+
+[{u&#39;_id&#39;: u&#39;parking&#39;, u&#39;count&#39;: 4545},
+ {u&#39;_id&#39;: u&#39;restaurant&#39;, u&#39;count&#39;: 2460},
+ {u&#39;_id&#39;: u&#39;bench&#39;, u&#39;count&#39;: 2415},
+ {u&#39;_id&#39;: u&#39;cafe&#39;, u&#39;count&#39;: 1410},
+ {u&#39;_id&#39;: u&#39;fast_food&#39;, u&#39;count&#39;: 1035}]</code></pre>
+<p>This was expected - Vancouverites do love being healthy and the outdoors, which explains the high number of benches and restaurants compared to fast food.</p>
+<p><strong>Top 3 cafe</strong></p>
+<pre><code>db.openstreetmap.aggregate([{
+        &#39;$match&#39;: {
+            &#39;amenity&#39;: 
+                &#39;cafe&#39;
+        } 
+    }, {
+        &#39;$group&#39;: {
+            &#39;_id&#39;: &#39;$name&#39;, 
+            &#39;count&#39;: {
+                &#39;$sum&#39;:1
+            } 
+        } 
+    }, {
+        &#39;$sort&#39;: {
+            &#39;count&#39;:-1
+        }
+    }, {
+        &#39;$limit&#39;: 3
+    }])
+
+[{u&#39;_id&#39;: u&#39;Starbucks&#39;, u&#39;count&#39;: 255},
+ {u&#39;_id&#39;: u&#39;Starbucks Coffee&#39;, u&#39;count&#39;: 115},
+ {u&#39;_id&#39;: u&#39;Tim Hortons&#39;, u&#39;count&#39;: 65}]</code></pre>
+<p>The high number of cafes peaked my interest, hence this query. Though it comes to little surprise that Starbucks is everywhere in Vancouver compared to the very Canadian, Tim Hortons. On a side note, the amenities names needs to be scrubbed.</p>
+<p><strong>Top 2 fast food</strong></p>
+<pre><code>db.openstreetmap.aggregate([{
+        &#39;$match&#39;: {
+            &#39;amenity&#39;: {
+                &#39;$exists&#39;: 1
+            }, 
+            &#39;amenity&#39;: 
+                &#39;fast_food&#39;
+        }
+    }, {
+        &#39;$group&#39;: {
+            &#39;_id&#39;: &#39;$name&#39;, 
+            &#39;count&#39;: {
+                &#39;$sum&#39;:1
+            } 
+        } 
+    }, {
+        &#39;$sort&#39;: {
+            &#39;count&#39;:-1
+        }
+    }, {
+        &#39;$limit&#39;: 2
+    }])
+
+[{u&#39;_id&#39;: u&#39;Subway&#39;, u&#39;count&#39;: 165}, {u&#39;_id&#39;: u&quot;McDonald&#39;s&quot;, u&#39;count&#39;: 100}]</code></pre>
+<p>This query was out of plain curiosity and is inline with the claim that Vancouverites are generally health conscious. Thus the prominence of Subway over McDonald's.</p>
+<h3 id="other-ideas-about-the-datasets">Other ideas about the datasets</h3>
+<p>The data validation and queries performed were primarily on <em>node</em> and <em>way</em> tags with a focus on address locations. There were a significant number of <em>nd</em> reference tags that were ignored. Depending on the application of this dataset for future analysis, it would be worthwhile to dive into this more and uncover the different tags and see if there are any discrepancies. It would also be interesting to dive into other areas of the data to assess cleanliness, such as postal codes, phone numbers and coordinate data.</p>
+<p>Furthermore, there are ample more opportunities to clean this data beyond this cursory excercise as seen in the <em>Top 3 cafe</em> query. Nevertheless, the dataset is fairly clean as noted above. OpenStreepMap is crowdsourced and is therefore dependant on users' input, which could lead to incomplete or outdated information. It would be interesting to compare these results with Google Maps'.</p>
+<h4 id="references">References</h4>
+<ul>
+<li><a href="http://boscoh.com/programming/reading-xml-serially.htm">Parsing large XML files</a></li>
+<li><a href="http://docs.python-guide.org/en/latest/scenarios/xml/">Python XML documentation</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Vancouver">Vancouver wiki</a></li>
+<li><a href="http://www.mkyong.com/mongodb/how-to-install-mongodb-on-mac-os-x/">Installing MongoDB</a></li>
+<li><a href="http://zaiste.net/2012/08/importing_json_into_mongodb/">Importing JSON into MongoDB</a></li>
+<li><a href="https://discussions.udacity.com/t/issues-running-queries-on-imported-mongodb/31158">Discusison Forum</a></li>
+</ul>

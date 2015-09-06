@@ -62,7 +62,7 @@ def update_name(name, mapping):
 
 if __name__ == '__main__':
     st_types = audit(OSMFILE)
-#    pprint(dict(st_types))
+    pprint(dict(st_types))
 
     for st_type, ways in st_types.iteritems():
         for name in ways:
