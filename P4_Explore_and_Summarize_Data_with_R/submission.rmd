@@ -1,6 +1,16 @@
-Stuff
-
-```{R}
-Hello
+Exploring Red Wine Quality
+========================================================
+```{r echo=FALSE, message=FALSE, warning=FALSE, packages}
+library(ggplot2)
+library(dplyr)
+library(GGally)
+library(scales)
+library(memisc)
+library(reshape)
+library(gridExtra)
 ```
 
+```{r echo=FALSE, Load_the_Data}
+# Load the Data
+df <- read.csv('data/wineQualityReds.csv')
+```
