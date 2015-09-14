@@ -2,3 +2,5 @@
 .ipynb_*
 vancouver_canada.osm*
 .Rproj.user
+.RData
+.Rhistory
