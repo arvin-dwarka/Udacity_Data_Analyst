@@ -4,7 +4,7 @@ In 2000, Enron was one of the largest companies in the United States. By 2002, i
 
 In this project, I used python's scikit-learn library that contained numerous machine learning algorithms. I built a person of interest identifier based on financial and email data made public as a result of the Enron scandal. This data has been combined with a hand-generated list of persons of interest (POI) in the fraud case, which means individuals who were indicted, reached a settlement or plea deal with the government, or testified in exchange for prosecution immunity. 
 
-Run `poi_id.py` to view the selected and tuned feature selections, and the machine learning algorithms' performances. Run tester.py` to view the performance of the chosen algorithm, K-nearest neighbors classifier. The following is a snippet of the scores returned from `tester.py`:
+Run `poi_id.py` to view the selected and tuned feature selections, and the machine learning algorithms' performances. Run `tester.py` to view the performance of the chosen algorithm, K-nearest neighbors classifier. The following is a snippet of the scores returned from `tester.py`:
 
 ```
 KNeighborsClassifier(algorithm='auto', leaf_size=30, metric='minkowski',
@@ -16,7 +16,7 @@ KNeighborsClassifier(algorithm='auto', leaf_size=30, metric='minkowski',
 
 ## Free-response Questions
 
->Summarize for us the goal of this project and how machine learning is useful in trying to accomplish it. As part of your answer, give some background on the dataset and how it can be used to answer the project question. Were there any outliers in the data when you got it, and how did you handle those?  [relevant rubric items: “data exploration”, “outlier investigation”]
+>Summarize for us the goal of this project and how machine learning is useful in trying to accomplish it. As part of your answer, give some background on the dataset and how it can be used to answer the project question. Were there any outliers in the data when you got it, and how did you handle those? 
 
 The goal of this project is to choose a combination of features, financial and email, of former Enron employees and choose an appropriate machine learning algorithm to predict whether that person is considered a person of interest (POI) or not. It should be noted that this dataset contained labeled data where POIs were flagged and as such the purpose of this project is to build a supervised classification model that could be used on other unlabeled datasets.
 
@@ -27,7 +27,7 @@ The Enron dataset contained 146 records with 14 financial features, 6 email feat
 - *THE TRAVEL AGENCY IN THE PARK*: This record is clearly not a person.
 
 
->What features did you end up using in your POI identifier, and what selection process did you use to pick them? Did you have to do any scaling? Why or why not? As part of the assignment, you should attempt to engineer your own feature that does not come ready-made in the dataset -- explain what feature you tried to make, and the rationale behind it. (You do not necessarily have to use it in the final analysis, only engineer and test it.) In your feature selection step, if you used an algorithm like a decision tree, please also give the feature importances of the features that you use, and if you used an automated feature selection function like SelectKBest, please report the feature scores and reasons for your choice of parameter values.  [relevant rubric items: “create new features”, “properly scale features”, “intelligently select feature”]
+>What features did you end up using in your POI identifier, and what selection process did you use to pick them? Did you have to do any scaling? Why or why not? As part of the assignment, you should attempt to engineer your own feature that does not come ready-made in the dataset -- explain what feature you tried to make, and the rationale behind it. (You do not necessarily have to use it in the final analysis, only engineer and test it.) In your feature selection step, if you used an algorithm like a decision tree, please also give the feature importances of the features that you use, and if you used an automated feature selection function like SelectKBest, please report the feature scores and reasons for your choice of parameter values.  
 
 I ended up using `salary`, `exercised_stock_options`, `bonus` along with the `poi` label. Surprisingly, and very frustratingly, I happened on these features randomly. To optimize my performance on the algorithms being tested, I used a `min-max scaler`, `SelectKBest` and `PCA` (with pipeline). The scaler was very important to normalize the data as features had different units and varied widely by several orders of magnitude in some cases. The K-best approach was used to select the 10 most important features that drive POI labels. The following table shows the k-best scores and the percentage of invalid (NaN) entries they contained:
 
@@ -83,7 +83,7 @@ Accuracy refers to the ratio of correct predictions out of its total. Precision 
 
 ### Note
 
-`data/` contains the input enron dataset and output pickle files used. `tool/` contains helper scripts used, most notably, `helper.py` that contains many custom functions used in this application.
+`data/` contains the input enron dataset and output pickle files used. `tools/` contains helper scripts used, most notably, `helper.py` that contains many custom functions used in this application.
 
 
 ### References
