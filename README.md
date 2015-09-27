@@ -9,3 +9,5 @@ This repository contains projects for Udacity's Data Analyst Nanodegree Program.
 - **P3** - Data Wrangling with MongoDB
 - **P4** - Explore and summarize data with R
 - **P5** - Identifying fraud from Enron email and financial data
+- **P6** - Make Effective Data Visualization
+- **P7** - Design an A/B Test
