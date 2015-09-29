@@ -69,8 +69,8 @@ def clf_evaluator(clf, features, labels, iterations=1000, test_size=0.3):
         clf.fit(features_train, labels_train)
         pred = clf.predict(features_test)
         accuracy.append(accuracy_score(labels_test, pred))
-        precision.append(precision_score(labels_test, pred))
-        recall.append(recall_score(labels_test, pred))
+        precision.append(precision_score(labels_test, pred, average="weighted"))
+        recall.append(recall_score(labels_test, pred, average="weighted"))
 
     print "accuracy: {}".format(mean(accuracy))
     print "precision: {}".format(mean(precision))

@@ -11,9 +11,11 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 from sklearn.cross_validation import train_test_split
+from sklearn.cross_validation import StratifiedShuffleSplit
 from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_moons, make_circles, make_classification
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.cluster import KMeans
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
@@ -58,7 +60,7 @@ email_features_list = [
 features_list = poi_label + financial_features_list + email_features_list
 
 ### Load the dictionary containing the dataset
-data_dict = pickle.load(open("data/final_project_dataset.pkl", "r") )
+data_dict = pickle.load(open("final_project_dataset.pkl", "r") )
 
 ### Remove outliers
 outlier_keys = ['TOTAL', 'LOCKHART EUGENE E', 'THE TRAVEL AGENCY IN THE PARK']
@@ -82,8 +84,8 @@ for record in my_dataset:
 my_feature_list += ['total_compensation']
 
 ### Optimize feature selection
-best_features = helper.k_best(my_dataset, my_feature_list, k=10)
-#my_feature_list = poi_label + best_features.keys()
+best_features = helper.k_best(my_dataset, my_feature_list, k=15)
+my_feature_list = poi_label + best_features.keys()
 my_feature_list = ['poi','salary','exercised_stock_options', 'bonus'] #surprisingly, this gave the best results!
 
 ### Visualize features for exploratory data analysis - commented out to speed through ML algorithms
@@ -98,68 +100,24 @@ features_train, features_test, labels_train, labels_test = train_test_split(feat
 # print features used
 print "{0} selected features: {1}\n".format(len(my_feature_list) - 1, my_feature_list[1:])
 
-### Gaussian Naive Bayes
-#from sklearn.naive_bayes import GaussianNB
-#clf_gaussian = GaussianNB()
 
-### K-means Clustering
-#from sklearn.cluster import KMeans
-#clf_kmeans = KMeans(n_clusters=2)
+names = [
+    "Nearest Neighbors", 
+    "K-Means", 
+    "Linear SVM", 
+    "RBF SVM", 
+    "Decision Tree",
+    "Random Forest", 
+    "AdaBoost", 
+    "Naive Bayes", 
+    "LDA", 
+    "QDA", 
+    "Logistic Regression"
+    ]
 
-### Adaboost Classifier
-#from sklearn.ensemble import AdaBoostClassifier
-#clf_ada = AdaBoostClassifier()
-
-### Support Vector Machine Classifier
-#from sklearn.svm import SVC
-#clf_svc = SVC(kernel='rbf', C=1000)
-
-### Random Forest Classifier
-#from sklearn.ensemble import RandomForestClassifier
-#clf_rfc = RandomForestClassifier()
-
-### K-neighbors Classifier
-#from sklearn.neighbors import KNeighborsClassifier
-#clf_knc = KNeighborsClassifier(algorithm='auto', weights='distance')
-
-### Logistic Regression Classifer
-#from sklearn.linear_model import LogisticRegression
-#clf_lr = LogisticRegression()
-
-### Evaluate all ML classifiers used
-#list_clf = [
-#	clf_gaussian,
-#	clf_kmeans,
-#	clf_ada,
-#	clf_svc,
-#	clf_rfc,
-#	clf_knc,
-#    clf_lr
-#	]
-
-#for clf in list_clf:
-#	helper.clf_evaluator(clf, features, labels)
-
-### Select best classifier
-#from sklearn.pipeline import Pipeline
-#from sklearn.decomposition import PCA
-
-#estimators = [('pca', PCA()),
-#              ('knc', KNeighborsClassifier())]
-
-#clf_pipe = Pipeline(estimators)
-
-#clf_pipe.set_params(KNeighbors__n_neighbors =  4)
-#clf_pipe.set_params(KNeighbors__p =  3)
-#clf_pipe.set_params(reduce_dim__n_components =  2)
-
-
-#clf = clf_pipe
-
-names = ["Nearest Neighbors", "Linear SVM", "RBF SVM", "Decision Tree",
-         "Random Forest", "AdaBoost", "Naive Bayes", "LDA", "QDA", "Logistic Regression"]
 classifiers = [
     KNeighborsClassifier(n_neighbors=3),
+    KMeans(),
     SVC(kernel="linear", C=0.025),
     SVC(gamma=2, C=1),
     DecisionTreeClassifier(max_depth=5),
@@ -168,7 +126,8 @@ classifiers = [
     GaussianNB(),
     LDA(),
     QDA(),
-    LogisticRegression()]
+    LogisticRegression()
+    ]
 
 for name, clf in zip(names, classifiers):
         clf.fit(features_train, labels_train)
@@ -178,10 +137,31 @@ for name, clf in zip(names, classifiers):
         helper.clf_evaluator(clf, features, labels)
 
 
+### Tune KNeighborsClassifier
+cv = StratifiedShuffleSplit(labels, 1000, random_state = 42)
+metrics = ['minkowski', 'euclidean', 'manhattan'] 
+weights = ['uniform', 'distance']
+n_neighbors = [1,2,3,4,5,6,7,8,9,10]
+param_grid_knc = dict(metric=metrics, weights=weights, n_neighbors=n_neighbors)
+clf_knc = GridSearchCV(KNeighborsClassifier(), param_grid=param_grid_knc, cv=cv)
+clf_knc.fit(features, labels)
+print clf_knc.best_estimator_
+print clf_knc.best_score_
+
+### Tune KMeans
+n_clusters = [2,3,4,5,6,7,8]
+tol = [0.000001, 0.00001, 0.0001, 0.001]
+param_grid_km = dict(n_clusters=n_clusters, tol=tol)
+clf_km = GridSearchCV(KMeans(), param_grid=param_grid_km, cv=cv)
+clf_km.fit(features, labels)
+print clf_km.best_estimator_
+print clf_km.best_score_
+
+
 clf = KNeighborsClassifier(n_neighbors=3)
 
 ### Dump your classifier, dataset, and features_list and 
 ### generate the necessary .pkl files for validating results
-pickle.dump(my_dataset, open("data/my_dataset.pkl", "w"))
-pickle.dump(clf, open("data/my_classifier.pkl", "w"))
-pickle.dump(my_feature_list, open("data/my_feature_list.pkl", "w"))
+pickle.dump(my_dataset, open("my_dataset.pkl", "w"))
+pickle.dump(clf, open("my_classifier.pkl", "w"))
+pickle.dump(my_feature_list, open("my_feature_list.pkl", "w"))
