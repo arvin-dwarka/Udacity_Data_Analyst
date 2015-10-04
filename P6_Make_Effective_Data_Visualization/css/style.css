@@ -1,0 +1,13 @@
+body {
+    background-color: #FFFCF4;
+}
+
+h1 {
+  color: rgb(64,64,64);
+  text-align: center;
+  font-size: 250%;
+}
+
+path {
+	opacity: 0.25;
+}
