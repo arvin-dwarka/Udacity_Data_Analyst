@@ -101,7 +101,7 @@ d3.csv('data/data.csv', function(d) {
             myChart.draw(800);
             mouse();
         });
-// sfo, atl phx
+
     // make mouseover events available by default
     mouse();
 

@@ -23,7 +23,7 @@ d3.csv("data/data.csv", function(d) {
     // set y axis
     var y = myChart.addMeasureAxis('y', 'On Time');
     y.tickFormat = '%';
-    y.overrideMin = 0.65;
+    y.overrideMin = 0.5;
     y.overrideMax = 0.9;
     y.title = 'Percentage of on-time arrivals';
 
