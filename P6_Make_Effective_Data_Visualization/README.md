@@ -2,13 +2,13 @@
 
 ### Summary
 
-This chart visualizes the percent distribution of flights arriving on-time at the ten most busiest US airports from 2003 to 2014. It illustrates the performances of these airports over time where there is a marked dip from 2003 to 2007, at which point things improve and peak at 2012. Recent trends from 2012 to 2014 show a steady decline.
+This chart visualizes the percent distribution of flights arriving on-time at the ten most busiest US airports from 2003 to 2014 against US GDP per Capita. It illustrates the performances of these airports over time where there is a marked dip from 2003 to 2007, at which point things improve and peak at 2012 and recent trends from 2012 to 2014 show a steady decline. It appears that airport performace as described by percent flights arriving on-time is negatively correlated with GDP per Capita in the United States.
 
 ### Design
 
 #### Initial
 
-The dataset was downloaded from [RITA](http://www.transtats.bts.gov/OT_Delay/ot_delaycause1.asp?display=download&pn=0&month=7&year=2015) from 2003 till July, 2015. Exploratory data analysis was conducted in Excel and Rstudio. The underlying hypothesis was that airport performance given by the percentage of timely flights would increase over time. I seemed logical that in a capitalist economy, customer happiness of flights departing on-time would be a driving force for airports and airlines. Initially, I surveyed the number of arrivals and delays at airports in Excel and decided that a line chart would be the best representation as opposed to a bar chart. I decided to remove 2015's data as the year is incomplete for the story I wanted to tell. In Rstudio, I produced a line chart faceted by airports as seen below:
+The dataset was downloaded from [RITA](http://www.transtats.bts.gov/OT_Delay/ot_delaycause1.asp?display=download&pn=0&month=7&year=2015) from 2003 till July, 2015, and the GDP data was downloaded from [WorldBank](http://data.worldbank.org/indicator/NY.GDP.PCAP.CD). Exploratory data analysis was conducted in Excel and Rstudio. The underlying hypothesis was that airport performance given by the percentage of timely flights would increase over time. I seemed logical that in a capitalist economy, customer happiness of flights departing on-time would be a driving force for airports and airlines. Initially, I surveyed the number of arrivals and delays at airports in Excel and decided that a line chart would be the best representation as opposed to a bar chart. I decided to remove 2015's data as the year is incomplete for the story I wanted to tell. In Rstudio, I produced a line chart faceted by airports as seen below:
 
 ![Starting R Plot](https://raw.githubusercontent.com/arvin-dwarka/Udacity_Data_Analyst/master/P6_Make_Effective_Data_Visualization/data/Rplot.png)
 
@@ -28,6 +28,13 @@ The feedback that I received was mainly positive as they all were able to read a
 - `manually select lines`: This was a great idea, but took so long to implement! By looking at some dimple.js examples, I was able to draw some inspiration on how to make the graph even more interactive by allowing manual selection. 
 - `causation of the trends`: I decided not to focus on this as the explanation to the trends observed is beyond the scope of this visualization. At the very least, it would have spurred readers to do their own research.
 
+
+#### Final v2
+
+This iteration was spurred by the feedback from my Udacity project evaluator. The comments were overall great, but the visualization didn't tell a proper story of airport performance by the economy's performance. I added a bar chart of `GDP per Capita` as a measure of the economy in a second y-axis. The main struggle was around the limitations of dimple.js where I had to implement some workaround given the nature of my dataset. 
+
+I was also able to get a hold of interviewee #3 for another round of feedback. His comments help validate the there is enough information on the chart to tell a story of airport performance versus economic performance. There were no addition feedback to promt another iteration at this point.
+
 ### Feedback
 
 I interviewed three people face-to-face to collect feedback, mainly focusing on the relationships, takeaways and confusions in the visualization. The following are transcripts of the three interviews that lasted about 5-10 minutes each.
@@ -42,6 +49,9 @@ I interviewed three people face-to-face to collect feedback, mainly focusing on 
 
 *Interview #3*
 > What's up with that title? It looks disconnected from everything else. I like the legends that you have! It lines up nicely and the colours help a lot. I can follow the trends - what happened in 2007? Can't be the recession, can it? I like that when I hover over a line it gets bolded. This was cool since the graph is dense in some places. Overall, it's a great graph. I like it!
+
+*Interview #3 v2*
+> This looks much better! It seemed that the recession did have an effect on flights arriving on time at major US airports. Strangely, it's a positive effect - except for Atlanta. Perhaps, it makes sense that more spending power would lead to more air travellers thus causing congestion and logistical nightmares at airports. I also like the changes you made. They make the graph look so much more polished. The contrast between the coloured lines and the grey bar chart helps me focus on each individual piece easily. Lastly, I really like how you scaled the other y-axis. It doesn't interfere with the line graphs at all.
 
 
 ### References
