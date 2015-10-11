@@ -6,25 +6,32 @@ Experiment Design
 ### Metric Choice
 
 - `Number of cookies`: invariant metric
+
 > As the *start free trial* page changes, the number of user that visit the website is unlikely to vary as that page has not been seen yet and should not affect users visiting the page.
 
 * `Number of user-ids`: none
+
 > Since the enrollment depends on the rendering of *start free trial* page, I would expect to see discrepancies in the control and experimental group. As such, it cannot be an invariance metric. On the other hand, it makes for a poor evaluation metric as it is redundant compared to the other metrics. The number of user-ids or enrolled users can fluctuate a lot with respect to the number of *start free trial* clicks on a given day, and thus not a good proxy for this experiment. Instead, the number of user-ids divided by the number of *start free trial* clicks, which is the gross conversion, is a better metric as it marginalizes variances in the empirical count of user-ids.
 
 * `Number of clicks`: invariance metric
+
 > This metric does not depend on how the *start free trial* page is rendered, much like the number of cookies. 
 
 * `Click through probability`: Invariance metric
+
 > Similar to number of cookies and clicks, since the users have not seen the *start free trial* page before they decide the click on the button, the click through probability also is not dependent on the test being carried out.
 
 * `Gross conversion`: evaluation metric
-> The rendering of the *start free trial* page influences the number of users signing up for the free trial. That is, the *5 or more hours per week* suggestion is likely to affect conversion rates.
+
+> The rendering of the *start free trial* page influences the number of users signing up for the free trial. That is, is the *5 or more hours per week* suggestion likely to affect conversion rates - this is one question we would like to understand through this A/B test. Therefore, this is a good evaluation metric.
 
 * `Retention`: evaluation metric
-> Likewise, it is likely that prompting users about the *5 or more hours per week* will have an effect on the ratio of users who make payments versus those who finish the free trial.
+
+> Likewise, it can be presumed that prompting users about the *5 or more hours per week* will have an effect on the ratio of users who make payments versus those who finish the free trial, and thus making this metric good for evaluation. However, this evaluation metric is discarded as it would have taken too long to gather data on this to support or deny the stated hypothesis of this A/B test. A complete analysis of this rationale is given below.
 
 * `Net conversion`: evaluation metric
-> Since this metric is the product of the previous two metric, it can be simply derived to be an evaluation metric as well. The ratio of users who make payment over those who see the *start free trial* page is dependent on the rendering of that page and the *5 or more hours per week* suggestion.
+
+> Since this metric is the product of the previous two metrics, it can be simply derived to be an evaluation metric as well. The ratio of users who make payment over those who see the *start free trial* page is dependent on the rendering of that page and the *5 or more hours per week* suggestion. Hence, being a good overall goal of the A/B test and a good evaluation metric.
 
 
 ### Measuring Standard Deviation
@@ -39,20 +46,7 @@ N = 5000 * 0.08 = 400
 std dev = sqrt(0.20625 * (1-0.20625) / 400) = 0.0202
 ```
 
-The unit of analysis here is a person who click the "start free trial" page, and
-the unit of diversion is a cookie that does so. They are highly correlated, but
-not exactly the same as a user could visit the site using a different browser, or device, or reset their cookies altogether. Still the high degree of correlation suggests that the analytical estimate is fairly accurate.
-
-#### Retention
-
-```
-p = 0.53 (given)
-N = 5000 * 0.08 * 0.20625 = 82.5
-std dev = sqrt(0.53 * (1-0.53) / 82.5) = 0.0549
-```
-
-The unit of analysis here is a person who enrolled the free trial, and the
-unit of diversion is the user-id that does so. These two should match up well given normal use cases. Therefore, the analytical estimates should match the empirical one well given the unit of analysis and unit of diversion have very strong match.
+Gross conversion is the number of user-ids to complete checkout and enroll in the free trial divided by number of unique cookies to click the "Start free trial" button. The unit of analysis here is the number of user-ids to complete checkout, and the unit of diversion is the number of unique cookies to click the *start free trial* button. They are highly correlated, but not exactly the same as a user could visit the site using a different browser, or device, or reset their cookies altogether. Still the high degree of correlation suggests that the analytical estimate is fairly accurate.
 
 #### Net conversion
 
@@ -62,7 +56,7 @@ N = 5000 * 0.08 = 400
 std dev = sqrt(0.1093125 * (1-0.1093125) / 400) = 0.0156
 ```
 
-The analytical estimate is likely accurate as both the unit of analysis and unit of diversion are highly correlated as is with gross conversion.
+Net conversion is the number of user-ids to remain enrolled past the 14-day boundary (and thus make at least one payment) divided by the number of unique cookies to click the *start free trial* button. The analytical estimate is likely accurate as both the unit of analysis and unit of diversion are highly correlated as is with gross conversion.
 
 
 Sizing
@@ -79,12 +73,12 @@ As the metrics used in this experiment are highly correlated, I decided against 
 | Net conversion    | 10.93125%                | 0.75% | 27,413             | 685,325                    |
 
 
-To achieve the necessary number of pageviews for the retention metric, it would take 117 days of complete site traffic, which is too long for an A/B test. Thus, only gross conversion and net conversion are used as evaluation metrics with the required number of pageviews being 685,325 and taking only 35 days at a 50% site traffic percentage.
+To achieve the necessary number of pageviews for the retention metric, it would take 117 days of complete site traffic, which is too long for an A/B test. Thus, only gross conversion and net conversion are used as evaluation metrics with the required number of pageviews being 685,325 and taking only 18 days at a 100% site traffic percentage.
 
 
 ### Duration vs. Exposure
 
-The fraction of Udacity's site traffic to be redirected for this experiment is purely driven by the risk tolerance of the experimenter. I feel that a 50% share gives a good balance between the length of the experiment of 35 days (34.3 days rounded up) and the risk tolerance of exposing users to uncertain changes. That is, with a 50% traffic redirected as test subjects, there will be 50-50 split between the control and experimental groups where each have 25% of the overall site traffic. If this experiment turns out to have a negative impact on the business, only 25% of all site visitors are at risk. Reducing this risk will require lengthening the duration of the experiment from 35 days, which is not desirable for an A/B test. 
+The fraction of Udacity's site traffic to be redirected for this experiment is purely driven by the risk tolerance of the experimenter. I feel that a 100% share towards this experiment gives a good and tolerable balance between the length of the experiment of 18 days (17.1 days rounded up) and the risk tolerance of exposing users to uncertain changes. That is, with all traffic redirected as test subjects, there will be 50-50 split between the control and experimental groups where each have 50% of the overall site traffic. If this experiment turns out to have a negative impact on the business, only 50% of all site visitors are at risk. Reducing this risk will require lengthening the duration of the experiment from 18 days, which is not desirable for an A/B test.
 
 
 Experiment Analysis
@@ -172,7 +166,7 @@ I used this [online calculator](http://graphpad.com/quickcalcs/binomial1.cfm) to
 
 |                  | Number of days to see an improvement out of 23 total days | p-value | Statistically significant (< alpha) |
 |:----------------:|:---------------------------------------------------------:|:-------:|:-----------------------------------:|
-| Gross conversion |                             4                             |  0.0025 |                 Yes                 |
+| Gross conversion |                             4                             |  0.0026 |                 Yes                 |
 |  Net conversion  |                             10                            |  0.6776 |                  No                 |
 
 ### Summary
@@ -182,21 +176,21 @@ I decided not to use the Bonferroni correction as the metrics are already highly
 
 ### Recommendation
 
-I recommend that we do not adopt the proposed changes of including the *5 or more hour* suggestion to the *start free trial* page as the A/B test shows that this will not have a practical significant effect on net conversion. This change will not meet its business goal of increasing the number of paid users, and therefore this feature cannot be shipped.
+I recommend that we do not adopt the proposed changes of including the *5 or more hour* suggestion to the *start free trial* page as the A/B test shows that this will not have a practical significant effect on all evaluation metric, in particular, the net conversion. This change will not meet its business goal of increasing the number of paid users, and therefore this feature cannot be shipped.
 
 
 Follow-Up Experiment
 --------------------
 
-This experiment was focused on acquiring new users who are more qualified and would thus convert better. A potential follow-up experiment could be testing *annual subscription with a discount*. Each nanodegree take a good part of a year on average. This feature will allow users who are committed on the long-term to sign-up and study from various nanodegree curriculum as they please and at a suitable pace. 
+This experiment was focused on acquiring new users who are more qualified and would thus convert better. A potential follow-up experiment could be testing *enroll now with a discount*. Each nanodegree take a good part of a year on average and there is currently an offer of receiving 50% of tuition paid back if the program is completed within a year. The proposed discount will be applicable if the student finishes a course within a set time frame, say a month. This feature will allow users who are committed on the long-term to sign-up right away without entering a free trial and study from various nanodegree curriculum or standalone courses as they please and at a set time frame. This option will appear in addition to the *start free trial* feature.
 
-The hypothesis is that by providing this annual-subscription-discount feature, the number of signups will increase as students will understand the long-term nature of Udacity's course learning and will not have to make a rushed decision in just 14 days. Furthermore, on a business perspective, Udacity will be able to collect more cash upfront that it can reinvest in itself by increasing its library of courses or the quality of some courses, which will increase the life-time-value of users. Following are two evaluation metrics that can be used to test this hypothesis:
+The hypothesis is that by providing this direct enrollment with a discount for completion in a set time frame feature, the number of signups will increase as students will understand the long-term nature of Udacity's course learning and will not have to make a rushed decision in just 14 days. They will have an expectation set on what an average completion time frame looks like and work towards that. Following are two evaluation metrics that can be used to test this hypothesis:
 
-* __net conversion rate__: this will provide data to test whether this new subscription boosts enrollment.
+* __net conversion rate__: this will provide data to test whether this new feature boosts enrollment.
 
 * __average revenue per page view__: this will test whether there are any financial improvements with this new subscription.
 
-Similar to the experiment conducted above, this follow-up experiment can use cookies as the initial unit of diversion, and user ids when they sign-up. This ensures that a signed-in user is not both in the control and experimental group depending on what rendered page they saw when they first visited the site.
+Similar to the experiment conducted above, this follow-up experiment can use cookies as the unit of diversion, and user ids when they sign-up. This ensures that a signed-in user is not both in the control and experimental group depending on what rendered page they saw when they first visited the site. Further experimentation could be done on the discount value offered.
 
 
 References
