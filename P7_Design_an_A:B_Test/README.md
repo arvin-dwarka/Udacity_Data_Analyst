@@ -46,7 +46,7 @@ N = 5000 * 0.08 = 400
 std dev = sqrt(0.20625 * (1-0.20625) / 400) = 0.0202
 ```
 
-Gross conversion is the number of user-ids to complete checkout and enroll in the free trial divided by number of unique cookies to click the "Start free trial" button. The unit of analysis here is the number of user-ids to complete checkout, and the unit of diversion is the number of unique cookies to click the *start free trial* button. They are highly correlated, but not exactly the same as a user could visit the site using a different browser, or device, or reset their cookies altogether. Still the high degree of correlation suggests that the analytical estimate is fairly accurate.
+Gross conversion is the number of user-ids to complete checkout and enroll in the free trial divided by number of unique cookies to click the "Start free trial" button. Since the unit of analysis and the unit of diversion is the cookie, the analytic variance is likely to match the empirical variance. Thus, the analytical estimate is used for this evaluation metric.
 
 #### Net conversion
 
@@ -56,7 +56,7 @@ N = 5000 * 0.08 = 400
 std dev = sqrt(0.1093125 * (1-0.1093125) / 400) = 0.0156
 ```
 
-Net conversion is the number of user-ids to remain enrolled past the 14-day boundary (and thus make at least one payment) divided by the number of unique cookies to click the *start free trial* button. The analytical estimate is likely accurate as both the unit of analysis and unit of diversion are highly correlated as is with gross conversion.
+Net conversion is the number of user-ids to remain enrolled past the 14-day boundary (and thus make at least one payment) divided by the number of unique cookies to click the *start free trial* button. The analytical estimate is likely accurate as both the unit of analysis and unit of diversion are cookies as is with gross conversion.
 
 
 Sizing
@@ -171,7 +171,7 @@ I used this [online calculator](http://graphpad.com/quickcalcs/binomial1.cfm) to
 
 ### Summary
 
-I decided not to use the Bonferroni correction as the metrics are already highly correlated and the correction would only make the resulting figures more conservative than needed. Based on the practically significance of the effective size and sign tests, gross conversion will decrease while net conversion will not be significantly impacted.
+I decided not to use the Bonferroni correction as the metrics are already highly correlated and the correction would only make the resulting figures more conservative than needed. It might be useful to apply the Bonferroni correction if we decide to do post-test-segmentation on the results, such as browser-based analysis or demographic analysis. Based on the practically significance of the effective size and sign tests, gross conversion will decrease while net conversion will not be significantly impacted.
 
 
 ### Recommendation
@@ -182,15 +182,25 @@ I recommend that we do not adopt the proposed changes of including the *5 or mor
 Follow-Up Experiment
 --------------------
 
-This experiment was focused on acquiring new users who are more qualified and would thus convert better. A potential follow-up experiment could be testing *enroll now with a discount*. Each nanodegree take a good part of a year on average and there is currently an offer of receiving 50% of tuition paid back if the program is completed within a year. The proposed discount will be applicable if the student finishes a course within a set time frame, say a month. This feature will allow users who are committed on the long-term to sign-up right away without entering a free trial and study from various nanodegree curriculum or standalone courses as they please and at a set time frame. This option will appear in addition to the *start free trial* feature.
+This experiment was focused on acquiring new users who are more qualified and would thus convert better. A potential follow-up experiment could be testing *enroll now with a discount*. Each nanodegree take a good part of a year on average and there is currently an offer of receiving 50% of tuition paid back if the program is completed within a year. The proposed discount will be applicable if the student finishes a course within a set time frame, say a month. This feature will allow users who are committed on the long-term to sign-up right away without entering a free trial and study from various nanodegree curriculum or standalone courses as they please and at a set time frame. 
 
-The hypothesis is that by providing this direct enrollment with a discount for completion in a set time frame feature, the number of signups will increase as students will understand the long-term nature of Udacity's course learning and will not have to make a rushed decision in just 14 days. They will have an expectation set on what an average completion time frame looks like and work towards that. Following are two evaluation metrics that can be used to test this hypothesis:
+This option will appear after the *start free trial* button. This feature will allow users to skip the 14-day free trial portion and in exchange they get a tuition discount. This feature will be potentially compelling to users who are already determined to take the course and ready to jump in directly.
 
-* __net conversion rate__: this will provide data to test whether this new feature boosts enrollment.
+The hypothesis is that by providing this direct enrollment with a discount for completion in a set time frame feature, the number of signups will increase as students will understand the long-term nature of Udacity's course learning and will not have to make a rushed decision in just 14 days. They will have an expectation set on what an average completion time frame looks like and work towards that. Following are components for this analysis:
 
-* __average revenue per page view__: this will test whether there are any financial improvements with this new subscription.
+* _unit of diversion_: user_ids
 
-Similar to the experiment conducted above, this follow-up experiment can use cookies as the unit of diversion, and user ids when they sign-up. This ensures that a signed-in user is not both in the control and experimental group depending on what rendered page they saw when they first visited the site. Further experimentation could be done on the discount value offered.
+> This follow-up experiment can use user ids when they sign-up as the unit of diversion. This ensures that a signed-in user is not both in the control and experimental group.
+
+* _invariant metric_: number of user_ids
+
+> As the course page changes with half the population only seeing the *enrol with a discount* option after selecting the *start free trial*, the number of user that visit the website is unlikely to vary as that page has not been seen yet and should not affect users visiting the page.
+
+* _evaluation metric_: net conversion rate
+
+>This will provide data to test whether this new feature boosts enrollment. It is a good evaluation metric as it is directly dependent on the effect of the experiment.
+
+If the evaluation metric is practically significant and better than the control group at the end of the experiment, we can launch the new feature. Further experimentation could be done on the discount value offered.
 
 
 References
